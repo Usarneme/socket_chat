@@ -47,14 +47,14 @@
     }
 
     function getMessages() {
-      $.get('https://usarneme-socket-chat.herokuapp.com:80/messages', (data, status, xhr) => {
+      $.get('https://usarneme-socket-chat.herokuapp.com:443/messages', (data, status, xhr) => {
       // $.get('http://localhost:57468/messages', (data, status, xhr) => {
         data.forEach(addMessages)
       })
     }
 
     function sendMessage(message) {
-      $.post('https://usarneme-socket-chat.herokuapp.com:80/messages', message)
+      $.post('https://usarneme-socket-chat.herokuapp.com:443/messages', message)
     }
   </script>
 </body>
