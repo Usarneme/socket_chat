@@ -43,14 +43,14 @@ app.post('/messages', (req, res) => {
 })
 
 io.on('connection', () =>{
-  console.log('a user is connected')
+  console.log('IO Socket User Connected')
 })
 
 mongoose.connect(dbUrl, { useNewUrlParser: true }, (err) => {
-  console.log('mongodb connected', err)
+  console.log('MongoDB Connected', err)
 })
 
 var server = http.listen(process.env.PORT, () => {
-  console.log('server is running. Server.address().port: '+server.address().port+' . process.env.PORT: '+process.env.PORT)
+  console.log('Server is running. Server.address().port: '+server.address().port+' . process.env.PORT: '+process.env.PORT)
 })
 

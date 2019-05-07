@@ -42,13 +42,27 @@
     socket.on('message', addMessages)
 
     function addMessages(message) {
-      $("#messages").append(`<span class="row message-span"><strong class="col col-sm-1 message-name">${message.name}</strong><span class="col col-sm-11 msg">${message.message}</span></span>`)
+      // HTML-escaped-safely way of appending elements
+      var message_span = document.createElement('span')
+      message_span.classList.add('row', 'message-span')
+
+      var strong = document.createElement('strong')
+      strong.classList.add('col', 'col-sm-1', 'message-name')
+      strong.innerText = message.name
+
+      var msg_span = document.createElement('span')
+      msg_span.classList.add('col', 'col-sm-11', 'msg')
+      msg_span.innerText = message.message
+
+      message_span.append(strong)
+      message_span.append(msg_span)
+      
+      $("#messages").append(message_span)
       document.getElementById("messages").lastChild.scrollIntoView({behavior: "smooth"})
     }
 
     function getMessages() {
       $.get('https://usarneme-socket-chat.herokuapp.com:443/messages', (data, status, xhr) => {
-      // $.get('http://localhost:57468/messages', (data, status, xhr) => {
         data.forEach(addMessages)
       })
     }
