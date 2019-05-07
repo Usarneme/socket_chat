@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat App</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="outer-container">
+    <div id="messages"></div>
+    <hr />
+    <div class="inputs">
+      <div class="form-group row">
+        <textarea id="message" class="form-control col col-sm-8" placeholder="Enter A Message"></textarea>
+        <div class="form-group col col-sm-4 row">
+          <input id="name" class="form-control" placeholder="Enter A Name">
+          <button id="send" class="form-control btn btn-info">Send A Message</button>    
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+    var socket = io();
+
+    $(() => {
+      $("#send").click(() => {
+        if (!$("#name").val() || !$("#message").val()) {
+          alert('Name and message are required.')
+          return
+        }
+        sendMessage({name: $("#name").val(), message: $("#message").val()});
+      })
+      getMessages()
+    })
+
+    socket.on('message', addMessages)
+
+    function addMessages(message) {
+      $("#messages").append(`<span class="row message-span"><strong class="col col-sm-1 message-name">${message.name}</strong><span class="col col-sm-11 msg">${message.message}</span></span>`)
+      document.getElementById("messages").lastChild.scrollIntoView({behavior: "smooth"})
+    }
+
+    function getMessages() {
+      $.get('http://localhost:3001/messages', (data) => {
+        data.forEach(addMessages)
+      })
+    }
+
+    function sendMessage(message) {
+      $.post('http://localhost:3001/messages', message)
+    }
+  </script>
+</body>
+</html>
