@@ -15,7 +15,7 @@ var Message = mongoose.model('Message', {
 })
 
 // dbUrl contains the login and creds so is not shared
-var dbUrl = require('./secret.js')
+var dbUrl = process.env.dbUrl || require('./secret.js')
 
 app.get('/messages', (req, res) => {
   Message.find({},(err, messages)=> {
