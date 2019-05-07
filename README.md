@@ -8,26 +8,28 @@ Socket.io on the server listens for any client to emit a chat event by hitting t
 
 ### To run
 Clone the repository and cd into the directory created
-`git clone ...` 
+```git clone ...``` 
 
 Install npm dependencies
-`npm install`
+```npm install```
 
 
 Database dependencies are Mongo and Mongod daemon
-`sudo mongod` to start the Mongo daemon if you are using localhost, skip this for mLab or other hosted db
+```sudo mongod``` to start the Mongo daemon if you are using localhost, skip this for mLab or other hosted db
 
 Create the db and collection in MongoDB
-`mongo
->use socket_chat`
+```
+mongo
+>use socket_chat
+```
 
 Create a secret.js file which will contain your MongoDB database connection string
-`touch secret.js`
+```touch secret.js```
 
 Input your own MongoDB connection string. mLab or localhost are good options
-`module.exports = dbUrl = 'mongodb://username:password@127.0.0.1.or.something.mlab.com:51876/socket_chat'`
+```module.exports = dbUrl = 'mongodb://username:password@127.0.0.1.or.something.mlab.com:51876/socket_chat'```
 
 Start up the server
-`nodemon server` or `npm start`
+```nodemon server``` or ```npm start```
 
 Go to localhost:3001 in your browser of choice and start chatting!
