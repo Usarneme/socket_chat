@@ -5,7 +5,13 @@ var http = require('http').Server(app)
 var io = require('socket.io')(http)
 var mongoose = require('mongoose')
 
-app.use(express.static(__dirname))
+var staticOptions = {
+  setHeaders: function (res, path, stat) {
+    res.set('x-heroku-port', server.address().port)
+  }
+}
+
+app.use(express.static(__dirname, staticOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
@@ -16,9 +22,9 @@ var Message = mongoose.model('Message', {
 
 // dbUrl contains the login and creds so is not shared
 // Heroku Version
-var dbUrl = process.env.dbUrl
+// var dbUrl = process.env.dbUrl
 // Non-Heroku / Localhost Implementation
-// var dbUrl = require('./secret.js')
+var dbUrl = require('./secret.js')
 
 app.get('/messages', (req, res) => {
   Message.find({},(err, messages)=> {
