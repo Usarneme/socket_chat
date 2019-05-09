@@ -31,7 +31,10 @@ var dbUrl = process.env.dbUrl
 // process.env.PORT = 3000
 
 app.get('/messages', (req, res) => {
-  Message.find({},(err, messages)=> {
+  Message.find({}, (err, messages) => {
+    console.log('EXPRESS GET to /messages')
+    console.log('Returning message payload data:')
+    console.dir(messages)
     res.send(messages)
   })
 })
