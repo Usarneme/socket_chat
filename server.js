@@ -23,8 +23,12 @@ var Message = mongoose.model('Message', {
 // dbUrl contains the login and creds so is not shared
 // Heroku Version
 var dbUrl = process.env.dbUrl
+
 // Non-Heroku / Localhost Implementation
 // var dbUrl = require('./secret.js')
+
+// Testing
+// process.env.PORT = 3000
 
 app.get('/messages', (req, res) => {
   Message.find({},(err, messages)=> {
@@ -57,9 +61,6 @@ io.on('connection', () =>{
 mongoose.connect(dbUrl, { useNewUrlParser: true }, (err) => {
   console.log('MongoDB Connected', err)
 })
-
-// Testing
-process.env.PORT = 3000
 
 var server = http.listen(process.env.PORT, () => {
   console.log('Server is running. Server.address().port: '+server.address().port+' . process.env.PORT: '+process.env.PORT)
