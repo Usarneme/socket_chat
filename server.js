@@ -34,7 +34,8 @@ app.get('/messages', (req, res) => {
   Message.find({}, (err, messages) => {
     console.log('EXPRESS GET to /messages')
     console.log('Returning message payload data:')
-    console.dir(Object.keys(messages))
+    console.log(messages.toString())
+    console.log('Last message: '+messages[message.length-1])
     res.send(messages)
   })
 })
