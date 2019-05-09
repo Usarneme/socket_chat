@@ -43,7 +43,7 @@
     socket.on('message', addMessages)
 
     function addMessages(message) {
-      console.log('CLIENT: AddMessages().')
+      // console.log('CLIENT: AddMessages().')
       // HTML-escaped-safely way of appending elements
       var message_span = document.createElement('span')
       message_span.classList.add('row', 'message-span')
@@ -66,8 +66,8 @@
     function getMessages() {
       // $.get('http://localhost:3000/messages', (data, status, xhr) => {
       $.get('https://usarneme-socket-chat.herokuapp.com:443/messages', (data, status, xhr) => {
-        console.log('CLIENT getMessages function. Payload returned: ')
-        console.dir(data)
+        // console.log('CLIENT getMessages function. Payload returned: ')
+        // console.dir(data)
         data.forEach(addMessages)
       })
     }
@@ -82,10 +82,10 @@
     // Get rid of the abomination after a little while
     // 10'000 is range 0 - 10 seconds, needs at least 5 seconds to scroll across once
     var timer = Math.floor(Math.random() * 10000) + 5000
-    console.log('ABOMINATION WILL BE REMOVED IN: '+timer+'MS.')
+    console.log('ABOMINATION WILL BE REMOVED IN: '+timer+'ms ('+timer/1000+' sec).')
     setTimeout(function() {
       document.getElementById('abomination').remove()
-      console.log('Abomination removed. I am deeply sorry.')
+      console.log('Abomination removed. I am deeply sorry for what I have wrought.')
     }, timer)
   </script>
 </body>

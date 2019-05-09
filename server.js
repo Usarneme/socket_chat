@@ -5,6 +5,7 @@ var http = require('http').Server(app)
 var io = require('socket.io')(http)
 var mongoose = require('mongoose')
 
+// Heroku assigns a port dynamically per deploy
 var staticOptions = {
   setHeaders: function (res, path, stat) {
     res.set('x-heroku-port', server.address().port)
@@ -32,25 +33,22 @@ var dbUrl = process.env.dbUrl
 
 app.get('/messages', (req, res) => {
   Message.find({}, (err, messages) => {
-    console.log('EXPRESS GET to /messages')
-    console.log('Returning message payload data:')
-    console.log(messages.toString())
-    console.log('Last message: '+messages[messages.length-1])
+    // console.log('EXPRESS GET to /messages')
     res.send(messages)
   })
 })
 
 app.post('/messages', (req, res) => {
-  console.log('POSTING to /messages')
+  // console.log('POSTING to /messages')
   // Remove extra whitespace from begin/end of input
   req.body.message = req.body.message.trim()
   // Remove double spaces/tabs/extra whitespace within the message
   req.body.message = req.body.message.replace(/\s\s+/g, ' ')
 
   var message = new Message(req.body)
-  console.log('message._doc.message after trim: '+message._doc.message)
+  // console.log('message._doc.message after trim: '+message._doc.message)
 
-  message.save((err) =>{
+  message.save((err) => {
     if(err) sendStatus(500)
 
     io.emit('message', req.body)
@@ -58,7 +56,7 @@ app.post('/messages', (req, res) => {
   })
 })
 
-io.on('connection', () =>{
+io.on('connection', () => {
   console.log('IO Socket User Connected')
 })
 
