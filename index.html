@@ -7,9 +7,10 @@
 </head>
 <body>
   <div class="outer-container">
+    <marquee id="abomination" class="nav navbar fixed-top" scrollamount="15"><blink><h1>Welcome to Chat!!!</h1></blink></marquee>
     <div id="messages"></div>
     <hr />
-    <div class="inputs">
+    <div class="navbar fixed-bottom inputs">
       <div class="form-group row">
         <textarea id="message" class="form-control col col-sm-8" placeholder="Enter A Message"></textarea>
         <div class="form-group col col-sm-4 row">
@@ -47,11 +48,11 @@
       message_span.classList.add('row', 'message-span')
 
       var strong = document.createElement('strong')
-      strong.classList.add('col', 'col-sm-1', 'message-name')
+      strong.classList.add('col', 'col-sm-2', 'message-name')
       strong.innerText = message.name
 
       var msg_span = document.createElement('span')
-      msg_span.classList.add('col', 'col-sm-11', 'msg')
+      msg_span.classList.add('col', 'col-sm-10', 'msg')
       msg_span.innerText = message.message
 
       message_span.append(strong)
@@ -62,14 +63,27 @@
     }
 
     function getMessages() {
+      // $.get('http://localhost:3000/messages', (data, status, xhr) => {
       $.get('https://usarneme-socket-chat.herokuapp.com:443/messages', (data, status, xhr) => {
         data.forEach(addMessages)
       })
     }
 
     function sendMessage(message) {
+      // Testing
+      // $.post('http://localhost:3000/messages', message)
+      // Production
       $.post('https://usarneme-socket-chat.herokuapp.com:443/messages', message)
     }
+
+    // Get rid of the abomination after a little while
+    // 10'000 is range 0 - 10 seconds, needs at least 5 seconds to scroll across once
+    var timer = Math.floor(Math.random() * 10000) + 5000
+    console.log('ABOMINATION WILL BE REMOVED IN: '+timer+'MS.')
+    setTimeout(function() {
+      document.getElementById('abomination').remove()
+      console.log('Abomination removed. I am deeply sorry.')
+    }, timer)
   </script>
 </body>
 </html>

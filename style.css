@@ -1,22 +1,27 @@
 body {
   background-color: #333;
   color: #ddd;
+  font-size: 1.6rem;
 }
 
 .message-span {
-  margin: 0 2px;
-  padding: 5px;
+  margin: 0;
+  padding: 0;
   border: 1px groove gray;
 }
 
 .message-span:nth-of-type(2n) {
-  background: slategrey;
+  background: #707070;
 }
 
 .message-name {
   word-wrap: break-word;
   margin: 0;
   padding: 0;
+  background: #aaa;
+  color: #222;
+  max-width: 100px;
+  text-transform: capitalize;
 }
 
 #messages {
@@ -31,11 +36,8 @@ body {
 }
 
 .inputs {
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  min-height: 200px;
+  padding: 0;
 }
 
 #name {
@@ -45,4 +47,21 @@ body {
 .form-group {
   margin: 0;
   padding: 1px;
+  width: 100%;
 }
+
+@media all and (min-width: 760px) {
+  body {
+    font-size: 1.15rem;
+  }
+  .inputs {
+    min-height: unset;
+  }
+}
+
+@media all and (min-width: 1200px) {
+  body {
+    font-size: 0.9rem;
+  }
+}
+

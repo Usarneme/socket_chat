@@ -33,7 +33,15 @@ app.get('/messages', (req, res) => {
 })
 
 app.post('/messages', (req, res) => {
+  console.log('POSTING to /messages')
+  // Remove extra whitespace from begin/end of input
+  req.body.message = req.body.message.trim()
+  // Remove double spaces/tabs/extra whitespace within the message
+  req.body.message = req.body.message.replace(/\s\s+/g, ' ')
+
   var message = new Message(req.body)
+  console.log('message._doc.message after trim: '+message._doc.message)
+
   message.save((err) =>{
     if(err) sendStatus(500)
 
@@ -49,6 +57,9 @@ io.on('connection', () =>{
 mongoose.connect(dbUrl, { useNewUrlParser: true }, (err) => {
   console.log('MongoDB Connected', err)
 })
+
+// Testing
+process.env.PORT = 3000
 
 var server = http.listen(process.env.PORT, () => {
   console.log('Server is running. Server.address().port: '+server.address().port+' . process.env.PORT: '+process.env.PORT)
