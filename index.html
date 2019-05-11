@@ -7,10 +7,12 @@
 </head>
 <body>
   <div class="outer-container">
-    <marquee id="abomination" class="nav navbar fixed-top" scrollamount="15"><blink><h1>Welcome to Chat!!!</h1></blink></marquee>
-    <div id="messages"></div>
-    <hr />
-    <div class="navbar fixed-bottom inputs">
+    <header class="header">
+        <h1>Socket Chat</h1>
+    </header>
+    <marquee id="abomination" class="nav navbar fixed-top" scrollamount="20"><blink><h1>Welcome to Chat!!!</h1></blink></marquee>
+    <ul id="messages"></ul>
+    <div class="navbar inputs">
       <div class="form-group row">
         <textarea id="message" class="form-control col col-sm-8" placeholder="Enter A Message"></textarea>
         <div class="form-group col col-sm-4 row">
@@ -21,32 +23,20 @@
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
   <script src="/socket.io/socket.io.js"></script>
 
   <script>
-    var socket = io();
-
-    $(() => {
-      $("#send").click(() => {
-        if (!$("#name").val() || !$("#message").val()) {
-          alert('Name and message are required.')
-          return
-        }
-        sendMessage({name: $("#name").val(), message: $("#message").val()});
-      })
-      getMessages()
-    })
-
+    var socket = io()
     socket.on('message', addMessages)
 
     function addMessages(message) {
       // console.log('CLIENT: AddMessages().')
       // HTML-escaped-safely way of appending elements
-      var message_span = document.createElement('span')
-      message_span.classList.add('row', 'message-span')
+      var msg_li = document.createElement('li')
+      msg_li.classList.add('row', 'message-span')
 
       var strong = document.createElement('strong')
       strong.classList.add('col', 'col-sm-2', 'message-name')
@@ -56,11 +46,28 @@
       msg_span.classList.add('col', 'col-sm-10', 'msg')
       msg_span.innerText = message.message
 
-      message_span.append(strong)
-      message_span.append(msg_span)
+      msg_li.append(strong)
+      msg_li.append(msg_span)
       
-      $("#messages").append(message_span)
+      $("#messages").append(msg_li)
       document.getElementById("messages").lastChild.scrollIntoView({behavior: "smooth"})
+    }
+
+    function validateAndSend() {
+      if (!$("#name").val() || !$("#message").val()) {
+        alert('Name and message are required.')
+        return
+      }
+      sendMessage({name: $("#name").val(), message: $("#message").val()})
+      // Reset message textarea
+      $("#message")[0].value = ''
+    }
+
+    function sendMessage(message) {
+      // Testing
+      // $.post('http://localhost:3000/messages', message)
+      // Production
+      $.post('https://usarneme-socket-chat.herokuapp.com:443/messages', message)
     }
 
     function getMessages() {
@@ -72,21 +79,39 @@
       })
     }
 
-    function sendMessage(message) {
-      // Testing
-      // $.post('http://localhost:3000/messages', message)
-      // Production
-      $.post('https://usarneme-socket-chat.herokuapp.com:443/messages', message)
-    }
+    // Event listeners
+    $("#send").click(function() {
+      validateAndSend()
+    })
+
+    // if the Enter key was hit while in the send message input..
+    $("#message").keypress(function(event) {
+      if (event.which == 13) {
+        event.preventDefault()
+        validateAndSend()
+      }
+    })
+
+    // if the Enter key was hit while in the name input..
+    $("#name").keypress(function(event) {
+      if (event.which == 13) {
+        event.preventDefault()
+        validateAndSend()
+      }
+    })
 
     // Get rid of the abomination after a little while
-    // 10'000 is range 0 - 10 seconds, needs at least 5 seconds to scroll across once
-    var timer = Math.floor(Math.random() * 10000) + 5000
+    // 10'000 is range 0 - 10 seconds, needs at least 2.5 seconds to scroll across once
+    var timer = Math.floor(Math.random() * 10000) + 2500
     console.log('ABOMINATION WILL BE REMOVED IN: '+timer+'ms ('+timer/1000+' sec).')
     setTimeout(function() {
       document.getElementById('abomination').remove()
       console.log('Abomination removed. I am deeply sorry for what I have wrought.')
     }, timer)
+
+    // Initialize by getting messages at app load
+    $(() => getMessages());
+
   </script>
 </body>
 </html>
